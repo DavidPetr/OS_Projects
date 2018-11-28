@@ -1,0 +1,24 @@
+InterLockedIncrement
+InterLockedDecrement
+InterLockExchangeAdd
+
+InitializeCriticalSection //no reference to kernel object because kernel objects have to have security attribute
+EnterCriticalSection
+LeaveCriticalSection
+TryCriticalSection
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

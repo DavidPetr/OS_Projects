@@ -1,0 +1,15 @@
+SECURITY_ATTRIBUTES s;
+s.bInheritHandle=TRUE;
+HANDLE h=CreateFile(..,s)
+
+CreateProcess(
+.
+.
+.
+
+TRUE
+0
+.
+.
+.
+)

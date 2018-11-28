@@ -1,0 +1,58 @@
+#include <Windows.h>
+#include <stdio.h>
+
+
+int wmain(int argc, WCHAR* argv[]) {
+    DWORD AID=GetCurrentProcessId();
+    wprintf(L"AID %d\n", AID);
+    STARTUPINFO s;
+    PROCESS_INFORMATION p;
+    ZeroMemory(&s, sizeof(s));
+    s.cb = sizeof(s);
+    ZeroMemory(&p, sizeof(p));
+    WCHAR cmd[] = L"B.exe";
+    if(!CreateProcess(
+        NULL,
+        cmd,
+        NULL,
+        NULL,
+        FALSE,
+        0,
+        NULL,
+        NULL,
+        &s,
+        &p
+        ))
+    {
+        wprintf(L"Error %d \n", GetLastError());
+        exit(1);
+    }
+    Sleep(100);
+    wprintf(L"BID %d\n", p.dwProcessId);
+    /*
+    Sleep(2000);
+    TerminateProcess(p.hProcess, 1);
+    */
+    //WaitForSingleObject(p.hProcess, INFINITE);
+    /*
+    Sleep(5000);
+    DWORD ex;
+    GetExitCodeProcess(p.hProcess, &ex);
+    if(ex == STILL_ACTIVE)wprintf(L"Running \n");
+    else wprintf(L"Exit code %d\n", ex);*/
+    CloseHandle(p.hProcess);
+    CloseHandle(p.hThread);
+    system("PAUSE");
+    return 0;
+}
+
+#include <Windows.h>
+#include <stdio.h>
+
+int wmain(int argc, WCHAR* argv[])
+{
+    wprintf(L"B process is Running\n");
+
+    system("PAUSE");
+    return 0;
+}

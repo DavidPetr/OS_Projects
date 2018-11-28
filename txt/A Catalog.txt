@@ -1,0 +1,94 @@
+#include <Windows.h>
+
+#include <windows.h>
+#include <tchar.h>
+#include <stdio.h>
+//#include <iostream>
+bool copyFile(WCHAR * f1,HANDLE h_file2)
+{
+	HANDLE h_file1=CreateFile(
+		f1,
+		GENERIC_READ,
+		0,
+		NULL,
+		OPEN_EXISTING,
+		0,
+		NULL
+		);
+	if(h_file1==INVALID_HANDLE_VALUE){
+		wprintf(L"File1: %d\n",GetLastError());
+		return false;
+	}
+	if(h_file2==INVALID_HANDLE_VALUE){
+		MYPerror();
+		return FALSE;
+	}
+	if(h_file2==INVALID_HANDLE_VALUE){
+		CloseHandle(h_file1);
+		wprintf(L"File2: %d\n",GetLastError());
+		return false;
+	}
+	const int count=4096;
+	WCHAR buff[count];
+	DWORD number1,number2;
+	while(ReadFile(h_file1,buff,count*sizeof(WCHAR),&number1,NULL) &&
+		number1!=0){
+		if(!WriteFile(h_file2,buff,number1,&number2,NULL) || number1!=number2){
+			CloseHandle(h_file1);
+			wprintf(L"Write: %d\n",GetLastError());
+			return false;
+		}
+	}
+	CloseHandle(h_file1);
+	return true;
+}
+void MYPerror(DWORD error_code=GetLastError()) {
+	LPWSTR pBuffer = NULL;
+	if(!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
+		FORMAT_MESSAGE_FROM_SYSTEM,
+		NULL,
+		error_code,
+		0,
+		(LPWSTR)&pBuffer,
+		0,
+		NULL))
+	{
+		wprintf(L"Format message failed with %d\n",GetLastError());
+		return;
+	}
+	//setlocale(LC_ALL,"Russian");
+	wprintf(L"Formatted message: %s\n",pBuffer);
+	LocalFree(pBuffer);
+}
+static BOOL print_catalog(wchar_t* dest_file){
+	WIN32_FIND_DATA file_data;
+	HANDLE search=FindFirstFile(L".\\A*.txt",&file_data);
+	if(search==INVALID_HANDLE_VALUE)
+	{
+		MYPerror();
+		return FALSE;
+	}
+	HANDLE dest_handle=CreateFile(
+			dest_file,
+			GENERIC_WRITE,
+			0,
+			NULL,
+			CREATE_ALWAYS,
+			FILE_ATTRIBUTE_NORMAL,
+			NULL
+		);
+	do{
+		if(file_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)continue;
+		
+		if(copyFile(file_data.cFileName,dest_handle)==FALSE)break;
+	} 
+	while(FindNextFile(search,&file_data));
+
+	FindClose(search);
+	CloseHandle(dest_handle);
+}
+int wmain(int argc,wchar_t* argv[],wchar_t** envp){
+	if(argc==2){
+		print_catalog(argv[2]);
+	}
+}

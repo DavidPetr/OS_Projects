@@ -1,0 +1,57 @@
+#include <Windows.h>
+#include <stdio.h>
+
+DWORD WINAPI f1(void *p){
+	for(int i=1;i<=100;i+=2)
+	{
+		Sleep(10);
+		wprintf(L"%d ",i);
+	}
+	return 0;
+}
+DWORD WINAPI f2(void *p){
+	for(int i=0;i<=100;i+=2)
+	{
+		Sleep(10);
+		wprintf(L"%d ",i);
+	}
+	return 0;
+}
+
+int wmain(int argc,WCHAR** argv){
+	DWORD thread0ID;
+	HANDLE threadHandle0=CreateThread(
+				NULL,
+				0,
+				f1,
+				NULL,
+				0,
+				&thread0ID		
+				);
+	if(threadHandle0==NULL)
+	{
+		wprintf(L"ERROR %d \n",GetLastError());
+		exit(1);
+	}
+	DWORD thread1ID;
+	HANDLE threadHandle1=CreateThread(
+				NULL,
+				0,
+				f2,
+				NULL,
+				0,
+				&thread1ID		
+				);
+	if(threadHandle1==NULL)
+	{
+		wprintf(L"ERROR %d \n",GetLastError());
+		exit(1);
+	}
+	HANDLE handles[]={threadHandle0,threadHandle1};
+	WaitMultipleObjects(2,handles,TRUE,INFINITE);
+
+	CloseHandle(threadHandle0);
+	CloseHandle(threadHandle1);
+	return 0;
+
+}
