@@ -1,0 +1,25 @@
+#include <Windows.h>
+#include <stdio.h>
+
+int main(int argc,char **argv){
+	HANDLE handle1=GetStdHandle(STD_OUTPUT_HANDLE);
+	//SetStdHandle(handle1,createfile_handle);
+	printf("%D",handle);
+	return 0;
+}
+/*
+cat()
+cat if no arguments so get STDIn -> STDout
+if argument "File" ->STDout
+copyfile(handle1,handle2);
+
+if "File1" "File2" ... ->STDout
+
+cat File1 File2 ">F" all write in F
+
+
+SetStdHandle
+SetConsoleCtrlHandler 
+HandlerRoutine 
+Registering a Control Handler 
+*/
