@@ -66,21 +66,13 @@ int wmain(int argc, WCHAR* argv[])
 		return 1;
 	}
 	HANDLE h_file2 = (HANDLE)_wtoi(argv[1]);
+	HANDLE h_input = GetStdHandle(STD_INPUT_HANDLE);
 	DWORD dwWaitResult;	
 	while (isContinue) {
 		dwWaitResult = WaitForSingleObject(Mutex, INFINITE);
 		if (dwWaitResult == WAIT_OBJECT_0) {
 			__try {
-				wprintf(L"Second \n");
-				HANDLE Mutex = OpenMutex(MUTEX_ALL_ACCESS, TRUE, L"Mutex");
-				if (Mutex == NULL)
-				{
-					printf("CreateMutex error: %d\n", GetLastError());
-					getchar();
-					return 1;
-				}
-				wprintf(L"Second Lock Mutex \n");
-				HANDLE h_input = GetStdHandle(STD_INPUT_HANDLE);
+				wprintf(L"Second \n");				
 				if (!Copyfile(h_input, h_file2))
 				{
 					wprintf(L"Writting error\n");

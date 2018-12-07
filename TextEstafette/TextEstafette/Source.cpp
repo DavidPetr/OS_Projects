@@ -113,20 +113,12 @@ int wmain(int argc, WCHAR* argv[]) {
 		exit(1);
 	}
 	DWORD dwWaitResult;
+	HANDLE h_input = GetStdHandle(STD_INPUT_HANDLE);
 	while (isContinue) {
 		dwWaitResult = WaitForSingleObject(Mutex, INFINITE);
 		if (dwWaitResult == WAIT_OBJECT_0) {
 			__try {
-				wprintf(L"First \n");
-				HANDLE Mutex = OpenMutex(MUTEX_ALL_ACCESS, TRUE, L"Mutex");
-				if (Mutex == NULL)
-				{
-					printf("CreateMutex error: %d\n", GetLastError());
-					getchar();
-					return 1;
-				}
-				wprintf(L"First Lock Mutex \n");
-				HANDLE h_input = GetStdHandle(STD_INPUT_HANDLE);
+				wprintf(L"First \n");				
 				if (!Copyfile(h_input, h_file1))
 				{
 					wprintf(L"Writting error\n");
@@ -140,12 +132,6 @@ int wmain(int argc, WCHAR* argv[]) {
 				}
 			}
 		}
-	}
-	HANDLE h_input = GetStdHandle(STD_INPUT_HANDLE);
-	if (!Copyfile(h_input, h_file1))
-	{
-		wprintf(L"Writting error\n");
-		MYPerror();
 	}
 	CloseHandle(p.hProcess);
 	CloseHandle(p.hThread);
