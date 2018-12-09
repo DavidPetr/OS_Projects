@@ -1,5 +1,5 @@
 ## Producer & Consumer
-That project is about producer & consumer via semaphore.
+This project is about producer & consumer via semaphore.
 Initially we have buffer, which size is 5, threads producers and consumers.
 Producers start produce filling buffer.
 Consumers start consume emptying buffer.
