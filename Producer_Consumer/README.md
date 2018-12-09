@@ -1,6 +1,6 @@
 ## Producer & Consumer
 This project is about producer & consumer via semaphore.
-Initially we have buffer, which size is 5, threads producers and consumers.
+Initially we have buffer, which size is 5, and have threads: producers and consumers.
 Producers start produce filling buffer.
 Consumers start consume emptying buffer.
 Initial semaphore_empty is 5, semaphore_full is 0.(It is predictable)
