@@ -21,7 +21,7 @@ DWORD* producer_ids, *consumer_ids;
 DWORD* buffer = NULL;
 DWORD index_buffer = 0;
 
-void MYPerror(DWORD error_code = GetLastError()) {
+VOID MYPerror(DWORD error_code = GetLastError()) {
 
 	LPWSTR pBuffer = NULL;
 	if (!FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER |
@@ -40,62 +40,24 @@ void MYPerror(DWORD error_code = GetLastError()) {
 	wprintf(L"Formatted message: %s\n", pBuffer);
 
 }
+VOID assert(void* actual_value, wchar_t* msg, int exit_code)
+{
+	if (actual_value == NULL)
+	{
+		wprintf(msg);
+		MYPerror();
+		exit(exit_code);
+	}
+}
 VOID initilize() {
-	producers =(HANDLE*)malloc(sizeof(HANDLE)*Producers_Count);
-	if (producers == NULL) {
-		wprintf(AllocateError);
-		MYPerror();
-		exit(1);
-	}
-
-	consumers = (HANDLE*)malloc(sizeof(HANDLE)*Consumers_Count);
-	if (consumers == NULL) {
-		wprintf(AllocateError);
-		MYPerror();
-		exit(1);
-	}
-
-	producer_ids = (DWORD*)malloc(sizeof(DWORD)*Producers_Count);
-	if (producer_ids == NULL) {
-		wprintf(AllocateError);
-		MYPerror();
-		exit(1);
-	}
-
-	consumer_ids = (DWORD*)malloc(sizeof(DWORD)*Consumers_Count);
-	if (consumer_ids == NULL) {
-		wprintf(AllocateError);
-		MYPerror();
-		exit(1);
-	}
-
-	mutex = CreateMutex(NULL, FALSE, NULL);
-	if (mutex == NULL) {
-		wprintf(MutexError);
-		MYPerror();
-		exit(1);
-	}
-
-	full_semaphore = CreateSemaphore(NULL, FULL, SemaphoreMaximumCount, NULL);
-	if (full_semaphore == NULL) {
-		wprintf(SemaphoreError);
-		MYPerror();
-		exit(1);
-	}
-
-	empty_semaphore = CreateSemaphore(NULL, EMPTY, SemaphoreMaximumCount, NULL);
-	if (empty_semaphore == NULL) {
-		wprintf(SemaphoreError);
-		MYPerror();
-		exit(1);
-	}
-
-	buffer = (DWORD*)malloc(sizeof(DWORD) * BUFFER_SIZE);
-	if (buffer == NULL) {
-		wprintf(AllocateError);
-		MYPerror();
-		exit(1);
-	}
+	assert(producers = (HANDLE*)malloc(sizeof(HANDLE)*Producers_Count), AllocateError, 1);
+	assert(consumers = (HANDLE*)malloc(sizeof(HANDLE)*Consumers_Count), AllocateError, 1);
+	assert(producer_ids = (DWORD*)malloc(sizeof(DWORD)*Producers_Count), AllocateError, 1);
+	assert(consumer_ids = (DWORD*)malloc(sizeof(DWORD)*Consumers_Count), AllocateError, 1);
+	assert(mutex = CreateMutex(NULL, FALSE, NULL), MutexError, 1);
+	assert(full_semaphore = CreateSemaphore(NULL, FULL, SemaphoreMaximumCount, NULL), SemaphoreError, 1);
+	assert(empty_semaphore = CreateSemaphore(NULL, EMPTY, SemaphoreMaximumCount, NULL), SemaphoreError, 1);
+	assert(buffer = (DWORD*)malloc(sizeof(DWORD) * BUFFER_SIZE), AllocateError, 1);
 	ZeroMemory(buffer, BUFFER_SIZE * sizeof(DWORD));
 }
 VOID finalize() {
