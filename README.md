@@ -3,7 +3,7 @@ This repository contains experiments with operating systems, especially with Win
 
 ## Some preconditions for successfull build
 
-### Windows
+## Windows
 NT examples of this repository are built with Visual Studio 2015 Community.
 
 ## Contribution
