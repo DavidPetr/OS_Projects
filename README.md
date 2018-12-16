@@ -1,4 +1,4 @@
-# os-experiments
+# OS_Projects
 This repository contains experiments with operating systems, especially with Windows.
 
 ## Some preconditions for successfull build
